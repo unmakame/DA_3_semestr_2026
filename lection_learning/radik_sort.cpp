@@ -45,7 +45,7 @@ void print_v(const std::vector<int> &v){
 }
 
 int main(){
-    std::vector<int> v = {1,11111,111111,11,10};
+    std::vector<int> v = {1,12,4,23,5,23,67,52,42};
     print_v(v);
     std::cout << " ";
     rad_sort(v);
