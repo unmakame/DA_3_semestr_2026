@@ -18,7 +18,7 @@ private:
 public:
     Vector() = default;
 
-    Vector(const Vector& other){
+    Vector(const Vector &other){
         if(this != &other){
             resize(other.size);
             for(size_t i = 0; i < size; i++){
@@ -27,7 +27,7 @@ public:
         }
     }
 
-    Vector(Vector&& other) noexcept
+    Vector(Vector &&other) noexcept
         : data_ptr(other.data_ptr), size(other.size), capacity(other.capacity) {
             other.data_ptr = nullptr;
             other.size = 0;
@@ -37,6 +37,22 @@ public:
     ~Vector(){
         clear();
         ::operator delete(data_ptr);
+    }
+
+    Vector& operator=(const Vector &other){
+        if (this != &other){
+            clear();
+            ::operator delete(data_ptr);
+
+            data_ptr = static_cast<T*>(::operator new(other.capacity 8 sizeof(T)));
+            size = other.size;
+            capacity = other.capacity;
+
+            for(size_t i = 0; i < size; i++){
+                new(&data_ptr[i]) T(other.data_ptr[i]);
+            }
+        }
+        return *this;
     }
 }
 
