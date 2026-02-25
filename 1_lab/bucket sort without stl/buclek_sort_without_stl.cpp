@@ -93,6 +93,38 @@ public:
         size = 0;
     }
 
+    void reserve(size_t new_capacity){
+        if (new_capacity <= capacity) return;
+
+        T* new_vec = static_cast<T*>(::operator new(new_capacity * sizeof(T)));
+
+        for(size_t i = 0; i < size; i++){
+            new (&new_vec[i]) T(std::move(data_ptr[i]));
+            data_ptr[i].~T();
+        }
+        ::operator delete(data_ptr);
+        data_ptr = new_vec;
+        capacity = new_capacity;
+    }
+
+    void resize(size_t new_size){
+        if(new_size > size){
+
+            for(size_t i = new_size; i < size; i++){
+                data_ptr[i].~T();
+            }
+
+        } else if(new_size > size){
+            if(new_size > capacity){
+                reserve(std::max(new_size, capacity * 2));
+            }
+            for(size_t i = size; i < new_size;i++){
+                new(data_ptr[i]) T();
+            }
+        }
+        size = new_size; 
+    }
+
 
 
 
