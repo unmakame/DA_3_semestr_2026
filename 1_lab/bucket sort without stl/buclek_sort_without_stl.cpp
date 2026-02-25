@@ -123,6 +123,30 @@ public:
         }
         size = new_size;
     }
+
+    template<typename U>
+    
+    void push_back(U &&val){
+        if(size >= capacity){
+            resize(capacity == 0 ? 1 : capacity * 2);
+        }
+
+        new (&data_ptr[size]) T(std::forward<U>(val));
+        size++;
+    }
+
+    void pop_back(){
+        if(size > 0){
+            size--;
+            data_ptr[size].~T();
+        }
+    }
+
+    T* begin() { return data_ptr; }
+    T* end() {return data_ptr + size; }
+
+    const T* begin() const {return data_ptr; }
+    const T* end() const {return data_ptr + size; }
 };
 
 
