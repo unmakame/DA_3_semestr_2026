@@ -8,19 +8,28 @@
 #include <algorithm>   
 
 
-// template <typename T>
-// class Vector{
+template <typename T>
+class Vector{
 
-// private:
-//     T* data_ptr = nullptr;
-//     size_t size = 0;
-//     size_t capacity = 0;
-// public:
-//     Vector() {};
-//     Vector(size_t size){
-//        this -> resize(size); 
-//     }
-// }
+private:
+    T* data_ptr = nullptr;
+    size_t size = 0;
+    size_t capacity = 0;
+public:
+    Vector() = default;
+
+    Vector(const Vector& other){
+        if(this != &other){
+            resize(other.size);
+            for(size_t i = 0; i < size; i++){
+                data_ptr[i] = other.data_ptr[i];
+            }
+        }
+    }
+
+    Vector(Vector&& other) noexcept 
+        
+}
 
 
 
