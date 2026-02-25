@@ -70,10 +70,28 @@ public:
     }
     return *this;
 }
+    T& operator[](size_t index){
+        return data_ptr[index];
+    }
 
+    const T& operator[](size_t index) const {
+        return data_ptr[index];
+    }
 
+    size_t size() const{
+        return size;
+    }
 
+    bool empty() const{
+        return size == 0;
+    }
 
+    void clear(){
+        for (size_t i = 0; i < size; i++){
+            data_ptr[i].~T();
+        }
+        size = 0;
+    }
 
 
 
