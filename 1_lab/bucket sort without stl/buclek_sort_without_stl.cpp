@@ -9,54 +9,54 @@
 
 
 template <typename T>
-class Vector{
-
+class Vector {
 private:
     T* data_ptr = nullptr;
     size_t size = 0;
     size_t capacity = 0;
+
 public:
     Vector() = default;
 
-    Vector(const Vector &other){
-        if(this != &other){
+    Vector(const Vector& other) {
+        if (this != &other) {
             resize(other.size);
-            for(size_t i = 0; i < size; i++){
+            for (size_t i = 0; i < size; i++) {
                 data_ptr[i] = other.data_ptr[i];
             }
         }
     }
 
-    Vector(Vector &&other) noexcept
+    Vector(Vector&& other) noexcept
         : data_ptr(other.data_ptr), size(other.size), capacity(other.capacity) {
-            other.data_ptr = nullptr;
-            other.size = 0;
-            other.capacity = 0;
-        } 
-        
-    ~Vector(){
+        other.data_ptr = nullptr;
+        other.size = 0;
+        other.capacity = 0;
+    }
+
+    ~Vector() {
         clear();
         ::operator delete(data_ptr);
     }
 
-    Vector& operator=(const Vector &other){
-        if (this != &other){
+    Vector& operator=(const Vector& other) {
+        if (this != &other) {
             clear();
             ::operator delete(data_ptr);
 
-            data_ptr = static_cast<T*>(::operator new(other.capacity 8 sizeof(T)));
+            data_ptr = static_cast<T*>(::operator new(other.capacity * sizeof(T)));
             size = other.size;
             capacity = other.capacity;
 
-            for(size_t i = 0; i < size; i++){
-                new(&data_ptr[i]) T(other.data_ptr[i]);
+            for (size_t i = 0; i < size; i++) {
+                new (&data_ptr[i]) T(other.data_ptr[i]);
             }
         }
         return *this;
     }
 
-    Vector& operator=(Vector &&other) noexcept {
-        if (this != &other){
+    Vector& operator=(Vector&& other) noexcept {
+        if (this != &other) {
             clear();
             ::operator delete(data_ptr);
 
@@ -67,10 +67,11 @@ public:
             other.data_ptr = nullptr;
             other.size = 0;
             other.capacity = 0;
+        }
+        return *this;
     }
-    return *this;
-}
-    T& operator[](size_t index){
+
+    T& operator[](size_t index) {
         return data_ptr[index];
     }
 
@@ -78,27 +79,27 @@ public:
         return data_ptr[index];
     }
 
-    size_t size() const{
+    size_t size() const {
         return size;
     }
 
-    bool empty() const{
+    bool empty() const {
         return size == 0;
     }
 
-    void clear(){
-        for (size_t i = 0; i < size; i++){
+    void clear() {
+        for (size_t i = 0; i < size; i++) {
             data_ptr[i].~T();
         }
         size = 0;
     }
 
-    void reserve(size_t new_capacity){
+    void reserve(size_t new_capacity) {
         if (new_capacity <= capacity) return;
 
         T* new_vec = static_cast<T*>(::operator new(new_capacity * sizeof(T)));
 
-        for(size_t i = 0; i < size; i++){
+        for (size_t i = 0; i < size; i++) {
             new (&new_vec[i]) T(std::move(data_ptr[i]));
             data_ptr[i].~T();
         }
@@ -107,23 +108,24 @@ public:
         capacity = new_capacity;
     }
 
-    void resize(size_t new_size){
-        if(new_size > size){
-
-            for(size_t i = new_size; i < size; i++){
+    void resize(size_t new_size) {
+        if (new_size < size) {
+            for (size_t i = new_size; i < size; i++) {
                 data_ptr[i].~T();
             }
-
-        } else if(new_size > size){
-            if(new_size > capacity){
+        } else if (new_size > size) {
+            if (new_size > capacity) {
                 reserve(std::max(new_size, capacity * 2));
             }
-            for(size_t i = size; i < new_size;i++){
-                new(data_ptr[i]) T();
+            for (size_t i = size; i < new_size; i++) {
+                new (&data_ptr[i]) T();
             }
         }
-        size = new_size; 
+        size = new_size;
     }
+};
+
+
 
 
 
