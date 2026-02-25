@@ -27,7 +27,12 @@ public:
         }
     }
 
-    Vector(Vector&& other) noexcept 
+    Vector(Vector&& other) noexcept
+        : data_ptr(other.data_ptr), size(other.size), capacity(other.capacity) {
+            other.data_ptr = nullptr;
+            other.size = 0;
+            other.capacity = 0;
+        } 
         
 }
 
