@@ -54,6 +54,21 @@ public:
         }
         return *this;
     }
+
+    Vector& operator=(Vector &&other) noexcept {
+        if (this != &other){
+            clear();
+            ::operator delete(data_ptr);
+
+            data_ptr = other.data_ptr;
+            size = other.size;
+            capacity = other.capacity;
+
+            other.data_ptr = nullptr;
+            other.size = 0;
+            other.capacity = 0;
+    }
+    return *this;
 }
 
 
