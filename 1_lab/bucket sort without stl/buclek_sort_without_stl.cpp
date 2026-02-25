@@ -34,6 +34,10 @@ public:
             other.capacity = 0;
         } 
         
+    ~Vector(){
+        clear();
+        ::operator delete(data_ptr);
+    }
 }
 
 
