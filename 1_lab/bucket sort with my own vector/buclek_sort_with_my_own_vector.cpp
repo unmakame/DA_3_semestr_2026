@@ -128,7 +128,7 @@ public:
     
     void push_back(U &&val){
         if(size >= capacity){
-            resize(capacity == 0 ? 1 : capacity * 2);
+            reserve(capacity == 0 ? 1 : capacity * 2);
         }
 
         new (&data_ptr[size]) T(std::forward<U>(val));
@@ -229,7 +229,7 @@ int main() {
             for(size_t i = 0; i < p.second.sz(); i++){
                 std::cout << p.second[i];
             }
-            
+
             std::cout << '\n';
         }
     }
