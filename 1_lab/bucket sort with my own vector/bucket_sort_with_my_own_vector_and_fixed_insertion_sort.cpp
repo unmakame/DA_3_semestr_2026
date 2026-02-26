@@ -205,9 +205,13 @@ int main() {
     bucket_sort(buckets);
 
     for (auto& b : buckets) {
-        if (b.sz() > 1) {
-            insertion_sort(b);
+        if(b.sz() <= 1) continue;
+
+        Vector<el> sorted;
+        for(size_t i = 0; i < b.sz(); i++){
+            insertion_sort(sorted, std::move(b[i]));
         }
+        b = std::move(sorted);
     }
 
     for (const auto& b : buckets) {
