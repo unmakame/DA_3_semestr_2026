@@ -201,21 +201,24 @@ void insertion_sort(Vector<el>& buck) {
         }
         
         if (left < i) {
-            std::move_backward(
-                buck.begin() + left,
-                buck.begin() + i,
-                buck.begin() + i + 1
-            );
+            // std::move_backward(
+            //     buck.begin() + left,
+            //     buck.begin() + i,
+            //     buck.begin() + i + 1
+            // );
+            for(size_t j = i; j > left; j--){
+                buck[j] = std::move(buck[j - 1]);
+            }
         }
         buck[left] = {key, std::move(val)};
     }
 }
 
 int main() {
-    std::vector<std::vector<el>> buckets;      
+    Vector<Vector<el>> buckets;      
     bucket_sort(buckets);
     for (auto& b : buckets) {
-        if (b.size() > 1) {
+        if (b.sz() > 1) {
             insertion_sort(b);
         }
     }
