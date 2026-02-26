@@ -221,3 +221,6 @@ int main() {
 
     return 0;
 }
+
+// 26 фев 2026, 13:56:25 157639686	W C++20 (GCC 14.1)	rez - OK time - 2.233s memory - 129.48Mb
+		
