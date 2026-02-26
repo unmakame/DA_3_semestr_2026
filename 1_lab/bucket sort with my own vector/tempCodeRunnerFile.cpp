@@ -175,54 +175,29 @@ void bucket_sort(Vector<Vector<el>>& buck) {
     }
 }
 
-// void insertion_sort(Vector<el>& buck) {
-//     for (size_t i = 1; i < buck.sz(); ++i) {
-//         u key = buck[i].first;
-//         Vector<char> val = std::move(buck[i].second);
+void insertion_sort(Vector<el>& buck) {
+    for (size_t i = 1; i < buck.sz(); ++i) {
+        u key = buck[i].first;
+        Vector<char> val = std::move(buck[i].second);
 
-//         size_t left = 0;
-//         size_t right = i;
-//         while (left < right) {
-//             size_t mid = left + (right - left) / 2;
-//             if (buck[mid].first <= key) {
-//                 left = mid + 1;
-//             } else {
-//                 right = mid;
-//             }
-//         }
-        
-//         for (size_t j = i; j > left; --j) {
-//             buck[j] = std::move(buck[j-1]);
-//         }
-
-//         buck[left].first = key;
-//         buck[left].second = std::move(val);
-//     }
-// }
-void insertion_sort(Vector<el>& sorted, el&& item) {
-    u key = item.first;
-    Vector<char> val = std::move(item.second);
-    size_t left = 0;
-    size_t right = sorted.sz();
-
-    while (left < right) {
-        size_t mid = left + (right - left) / 2;
-        if (sorted[mid].first <= key) {
-            left = mid + 1;
-        } else {
-            right = mid;
+        size_t left = 0;
+        size_t right = i;
+        while (left < right) {
+            size_t mid = left + (right - left) / 2;
+            if (buck[mid].first <= key) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
         }
+        
+        for (size_t j = i; j > left; --j) {
+            buck[j] = std::move(buck[j-1]);
+        }
+
+        buck[left].first = key;
+        buck[left].second = std::move(val);
     }
-
-    size_t old_size = sorted.sz();
-    sorted.resize(old_size + 1);
-
-    for (size_t j = old_size; j > left; --j) {
-        sorted[j] = std::move(sorted[j - 1]);
-    }
-
-    sorted[left].first = key;
-    sorted[left].second = std::move(val);
 }
 
 int main() {
@@ -252,4 +227,5 @@ int main() {
     return 0;
 }
 
+// 26 фев 2026, 13:56:25 157639686	W C++20 (GCC 14.1)	rez - OK time - 2.233s memory - 129.48Mb
 		
