@@ -180,7 +180,8 @@ void insertion_sort(Vector<el>& buck) {
         u key = buck[i].first;
         Vector<char> val = std::move(buck[i].second);
 
-        size_t left = 0, right = i;
+        size_t left = 0;
+        size_t right = i;
         while (left < right) {
             size_t mid = left + (right - left) / 2;
             if (buck[mid].first <= key) {
@@ -190,8 +191,10 @@ void insertion_sort(Vector<el>& buck) {
             }
         }
 
-        for (size_t j = i; j > left; --j) {
-            buck[j] = std::move(buck[j-1]);
+        buck.resize(buck.sz() + 1);
+
+        for (size_t j = buck.sz() - 1; j > left; j--) {
+            buck[j] = std::move(buck[j - 1]);
         }
 
         buck[left].first = key;
