@@ -224,7 +224,12 @@ int main() {
     }
     for (const auto& b : buckets) {
         for (const auto& p : b) {
-            std::cout << p.first << "\t" << p.second << '\n';
+            std::cout << p.first << "\t";
+            
+            for(size_t i = 0; i < p.second.sz(); i++){
+                std::cout << p.second[i];
+            }
+            std::cout << '\n';
         }
     }
     return 0;
