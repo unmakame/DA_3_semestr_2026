@@ -10,7 +10,6 @@ private:
     T* data_ptr = nullptr;
     size_t size = 0;
     size_t capacity = 0;
-
 public:
     Vector() = default;
 
@@ -145,14 +144,14 @@ void bucket_sort(Vector<Vector<el>>& buck) {
 
         Vector<char> val;
         char ch;
-        std::cin.get(ch);  
+        std::cin.get(ch);
 
         while (std::cin.get(ch)) {
             if (ch == '\n' || ch == '\r') break;
             val.push_back(ch);
         }
 
-        temp_data.push_back({key, std::move(val)});
+        temp_data.push_back(el{key, std::move(val)});
 
         if (key < min_val) min_val = key;
         if (key > max_val) max_val = key;
