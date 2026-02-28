@@ -2,7 +2,6 @@
 #include <utility>
 #include <cstdint>
 #include <limits>
-#include <algorithm>
 
 template <typename T>
 class Vector {
@@ -133,123 +132,82 @@ public:
 using u = std::uint64_t;
 using el = std::pair<u, Vector<char>>;
 
-void bucket_sort(Vector<Vector<el>>& buck) {
-    Vector<el> temp_data;
+void bucket_sort(Vector<el>& data) { //standart lib - vector not vector<vector> (input->sort->output)
+    if (data.empty()) return;
+    
     u min_val = std::numeric_limits<u>::max();
     u max_val = std::numeric_limits<u>::min();
+    
+    for (size_t i = 0; i < data.sz(); ++i) {
+        if (data[i].first < min_val) min_val = data[i].first;
+        if (data[i].first > max_val) max_val = data[i].first;
+    }
+    
+    u range = max_val - min_val;
+    if (range == 0) return;    
+    
+    size_t bucket_count = data.sz();
+    Vector<Vector<el>> buckets;
+    buckets.resize(bucket_count);
+    
+    for (size_t i = 0; i < data.sz(); ++i) {
+        size_t bucket_index = static_cast<size_t>(
+            ((static_cast<double>(data[i].first - min_val) / range) * (bucket_count - 1))
+        );
+        buckets[bucket_index].push_back(std::move(data[i]));
+    }
+    
+    data.clear();
+    
+    for (size_t i = 0; i < buckets.sz(); ++i) {
+        if (buckets[i].sz() > 1) {
+            for (size_t j = 1; j < buckets[i].sz(); ++j) {
+                el temp = std::move(buckets[i][j]);
+                size_t k = j;
+                while (k > 0 && buckets[i][k - 1].first > temp.first) {
+                    buckets[i][k] = std::move(buckets[i][k - 1]);
+                    --k;
+                }
+                buckets[i][k] = std::move(temp);
+            }
+        } 
+        
+        for (size_t j = 0; j < buckets[i].sz(); ++j) {
+            data.push_back(std::move(buckets[i][j]));
+        }
+    }
+}
 
-    while (true) {
-        u key;
-        if (!(std::cin >> key)) break;
-
+int main() { 
+    Vector<el> data;
+    u key;
+    char ch;
+    
+    while (std::cin >> key) {
         Vector<char> val;
-        char ch;
+        
         std::cin.get(ch);
-
+        
         while (std::cin.get(ch)) {
             if (ch == '\n' || ch == '\r') break;
             val.push_back(ch);
         }
-
-        temp_data.push_back(el{key, std::move(val)});
-
-        if (key < min_val) min_val = key;
-        if (key > max_val) max_val = key;
+        data.push_back(el{key, std::move(val)});
     }
-
-    if (temp_data.empty()) return;
-
-    u range = (max_val == min_val) ? 1 : max_val - min_val;
-    buck.clear();
-    buck.resize(temp_data.sz());
-
-    auto get_ind = [&](u key) -> size_t {
-        if (range == 0) return 0;
-        double d = static_cast<double>(key - min_val) / range;
-        return static_cast<size_t>(d * (temp_data.sz() - 1 + 1e-9));
-    };
-
-    for (size_t i = 0; i < temp_data.sz(); ++i) {
-        size_t idx = get_ind(temp_data[i].first);
-        buck[idx].push_back(std::move(temp_data[i]));
-    }
-}
-
-// void insertion_sort(Vector<el>& buck) {
-//     for (size_t i = 1; i < buck.sz(); ++i) {
-//         u key = buck[i].first;
-//         Vector<char> val = std::move(buck[i].second);
-
-//         size_t left = 0;
-//         size_t right = i;
-//         while (left < right) {
-//             size_t mid = left + (right - left) / 2;
-//             if (buck[mid].first <= key) {
-//                 left = mid + 1;
-//             } else {
-//                 right = mid;
-//             }
-//         }
-        
-//         for (size_t j = i; j > left; --j) {
-//             buck[j] = std::move(buck[j-1]);
-//         }
-
-//         buck[left].first = key;
-//         buck[left].second = std::move(val);
-//     }
-// }
-void insertion_sort(Vector<el>& sorted, el&& item) {
-    u key = item.first;
-    Vector<char> val = std::move(item.second);
-    size_t left = 0;
-    size_t right = sorted.sz();
-
-    while (left < right) {
-        size_t mid = left + (right - left) / 2;
-        if (sorted[mid].first <= key) {
-            left = mid + 1;
-        } else {
-            right = mid;
+    
+    bucket_sort(data);
+    
+    for (size_t i = 0; i < data.sz(); ++i) {
+        std::cout << data[i].first << "\t";
+        for (size_t j = 0; j < data[i].second.sz(); ++j) {
+            std::cout << data[i].second[j];
         }
+        std::cout << '\n';
     }
-
-    size_t old_size = sorted.sz();
-    sorted.resize(old_size + 1);
-
-    for (size_t j = old_size; j > left; --j) {
-        sorted[j] = std::move(sorted[j - 1]);
-    }
-
-    sorted[left].first = key;
-    sorted[left].second = std::move(val);
-}
-
-int main() {
-    Vector<Vector<el>> buckets;
-    bucket_sort(buckets);
-
-    for (auto& b : buckets) {
-        if(b.sz() <= 1) continue;
-
-        Vector<el> sorted;
-        for(size_t i = 0; i < b.sz(); i++){
-            insertion_sort(sorted, std::move(b[i]));
-        }
-        b = std::move(sorted);
-    }
-
-    for (const auto& b : buckets) {
-        for (const auto& p : b) {
-            std::cout << p.first << "\t";
-            for (size_t i = 0; i < p.second.sz(); ++i) {
-                std::cout << p.second[i];
-            }
-            std::cout << '\n';
-        }
-    }
-
     return 0;
 }
 
-		
+
+// - input data in main (STl)
+// input-output in main // iter - nt vector
+// binaty_insertion(sepparated) sort - and theory 
