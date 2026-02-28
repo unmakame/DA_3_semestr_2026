@@ -132,7 +132,35 @@ public:
 using u = std::uint64_t;
 using el = std::pair<u, Vector<char>>;
 
-void bucket_sort(Vector<el>& data) { //standart lib - vector not vector<vector> (input->sort->output)
+size_t binary_search_position(const Vector<el>& arr, size_t left, size_t right, const u& key) {
+    while (left < right) {
+        size_t mid = left + (right - left) / 2;
+        if (arr[mid].first <= key) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return left;
+}
+
+void binary_insertion_sort(Vector<el>& bucket) {
+    if (bucket.sz() <= 1) return;
+    
+    for (size_t i = 1; i < bucket.sz(); ++i) {
+        el temp = std::move(bucket[i]);
+        
+        size_t insert_pos = binary_search_position(bucket, 0, i, temp.first);
+        
+        for (size_t j = i; j > insert_pos; --j) {
+            bucket[j] = std::move(bucket[j - 1]);
+        }
+        
+        bucket[insert_pos] = std::move(temp);
+    }
+}
+
+void bucket_sort(Vector<el>& data) {
     if (data.empty()) return;
     
     u min_val = std::numeric_limits<u>::max();
@@ -161,16 +189,8 @@ void bucket_sort(Vector<el>& data) { //standart lib - vector not vector<vector> 
     
     for (size_t i = 0; i < buckets.sz(); ++i) {
         if (buckets[i].sz() > 1) {
-            for (size_t j = 1; j < buckets[i].sz(); ++j) {
-                el temp = std::move(buckets[i][j]);
-                size_t k = j;
-                while (k > 0 && buckets[i][k - 1].first > temp.first) {
-                    buckets[i][k] = std::move(buckets[i][k - 1]);
-                    --k;
-                }
-                buckets[i][k] = std::move(temp);
-            }
-        } 
+            binary_insertion_sort(buckets[i]);
+        }
         
         for (size_t j = 0; j < buckets[i].sz(); ++j) {
             data.push_back(std::move(buckets[i][j]));
@@ -206,7 +226,6 @@ int main() {
     }
     return 0;
 }
-
 
 // - input data in main (STl)
 // input-output in main // iter - nt vector
