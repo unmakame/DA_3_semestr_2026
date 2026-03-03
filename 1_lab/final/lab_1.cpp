@@ -129,10 +129,10 @@ public:
     const T* end() const { return data_ptr + size; }
 };
 
-using u = std::uint64_t;
+using u = std::size_t;
 using el = std::pair<u, Vector<char>>;
 
-size_t binary_search_position(const Vector<el>& arr, size_t left, size_t right, const u& key) {
+size_t bin_search(const Vector<el>& arr, size_t left, size_t right, const u& key) {
     while (left < right) {
         size_t mid = left + (right - left) / 2;
         if (arr[mid].first <= key) {
@@ -144,13 +144,13 @@ size_t binary_search_position(const Vector<el>& arr, size_t left, size_t right, 
     return left;
 }
 
-void binary_insertion_sort(Vector<el>& bucket) {
+void insertion_sort(Vector<el>& bucket) {
     if (bucket.sz() <= 1) return;
     
     for (size_t i = 1; i < bucket.sz(); ++i) {
         el temp = std::move(bucket[i]);
         
-        size_t insert_pos = binary_search_position(bucket, 0, i, temp.first);
+        size_t insert_pos = bin_search(bucket, 0, i, temp.first);
         
         for (size_t j = i; j > insert_pos; --j) {
             bucket[j] = std::move(bucket[j - 1]);
@@ -189,7 +189,7 @@ void bucket_sort(Vector<el>& data) {
     
     for (size_t i = 0; i < buckets.sz(); ++i) {
         if (buckets[i].sz() > 1) {
-            binary_insertion_sort(buckets[i]);
+            insertion_sort(buckets[i]);
         }
         
         for (size_t j = 0; j < buckets[i].sz(); ++j) {
@@ -224,6 +224,7 @@ int main() {
         }
         std::cout << '\n';
     }
+    
     return 0;
 }
 
