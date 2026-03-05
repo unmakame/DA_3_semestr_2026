@@ -6,11 +6,16 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
-
-
 .vscode/.history/
 
 
 .history/
-./DA./trash
-./lection_learning./remembering./*.exe
+
+
+DA/trash/
+lection_learning/remembering/
+
+
+*.exe
+lection_learning/remembering/*.exe
+DA/trash/*.exe
