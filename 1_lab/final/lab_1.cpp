@@ -129,10 +129,10 @@ public:
     const T* end() const { return data_ptr + size; }
 };
 
-using u = std::size_t;
-using el = std::pair<u, Vector<char>>;
+using st = std::size_t;
+using el = std::pair<st, Vector<char>>;
 
-size_t bin_search(const Vector<el>& arr, size_t left, size_t right, const u& key) {
+size_t bin_search(const Vector<el>& arr, size_t left, size_t right, const st& key) {
     while (left < right) {
         size_t mid = left + (right - left) / 2;
         if (arr[mid].first <= key) {
@@ -163,15 +163,15 @@ void insertion_sort(Vector<el>& bucket) {
 void bucket_sort(Vector<el>& data) {
     if (data.empty()) return;
     
-    u min_val = std::numeric_limits<u>::max();
-    u max_val = std::numeric_limits<u>::min();
+    st min_val = std::numeric_limits<st>::max();
+    st max_val = std::numeric_limits<st>::min();
     
     for (size_t i = 0; i < data.sz(); ++i) {
         if (data[i].first < min_val) min_val = data[i].first;
         if (data[i].first > max_val) max_val = data[i].first;
     }
     
-    u range = max_val - min_val;
+    st range = max_val - min_val;
     if (range == 0) return;    
     
     size_t bucket_count = data.sz();
@@ -200,7 +200,7 @@ void bucket_sort(Vector<el>& data) {
 
 int main() { 
     Vector<el> data;
-    u key;
+    st key;
     char ch;
     
     while (std::cin >> key) {
