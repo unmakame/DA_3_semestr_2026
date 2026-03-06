@@ -132,7 +132,7 @@ public:
 using st = std::size_t;
 using el = std::pair<st, Vector<char>>;
 
-size_t bin_search(const Vector<el>& arr, size_t left, size_t right, const st& key) {
+size_t bin_search_position(const Vector<el>& arr, size_t left, size_t right, const st& key) {
     while (left < right) {
         size_t mid = left + (right - left) / 2;
         if (arr[mid].first <= key) {
@@ -150,7 +150,7 @@ void insertion_sort(Vector<el>& bucket) {
     for (size_t i = 1; i < bucket.sz(); ++i) {
         el temp = std::move(bucket[i]);
         
-        size_t insert_pos = bin_search(bucket, 0, i, temp.first);
+        size_t insert_pos = bin_search_position(bucket, 0, i, temp.first);
         
         for (size_t j = i; j > insert_pos; --j) {
             bucket[j] = std::move(bucket[j - 1]);
@@ -224,10 +224,11 @@ int main() {
         }
         std::cout << '\n';
     }
-    
     return 0;
 }
-
+// standart lib - vector not vector<vector> (input->sort->output)
+// - input data in main (STl)
+// input-output in main // iter - nt vector
 // - input data in main (STl)
 // input-output in main // iter - nt vector
 // binaty_insertion(sepparated) sort - and theory 
