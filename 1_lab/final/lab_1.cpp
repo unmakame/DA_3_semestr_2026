@@ -155,7 +155,7 @@ void insertion_sort(Vector<el>& bucket) {
         for (size_t j = i; j > insert_pos; --j) {
             bucket[j] = std::move(bucket[j - 1]);
         }
-        
+
         bucket[insert_pos] = std::move(temp);
     }
 }
