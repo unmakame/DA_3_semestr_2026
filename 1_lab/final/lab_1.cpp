@@ -180,7 +180,7 @@ void bucket_sort(Vector<el>& data) {
     
     for (size_t i = 0; i < data.sz(); ++i) {
         size_t bucket_index = static_cast<size_t>(
-            ((static_cast<double>(data[i].first - min_val) / range) * (bucket_count - 1))
+            ((static_cast<double>(data[i].first - min_val) / range) * (bucket_count - 1))    
         );
         buckets[bucket_index].push_back(std::move(data[i]));
     }
