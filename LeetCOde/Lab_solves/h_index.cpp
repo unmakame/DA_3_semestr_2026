@@ -1,3 +1,11 @@
+#include <vector>
+
+
+
+using namespace std;
+
+
+
 class Solution{
 public:
     int hIndex(vector<int>& citations) {
@@ -11,7 +19,7 @@ public:
                 buckets[citation]++;
             }
         }
-
+ 
         int stats = 0;
         for(int h = n;h >= 0;h--){
             stats += buckets[h];
@@ -22,3 +30,8 @@ public:
         return 0;
     }
 };
+
+
+
+ 
+
