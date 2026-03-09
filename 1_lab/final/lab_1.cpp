@@ -232,3 +232,6 @@ int main() {
 // - input data in main (STl)
 // input-output in main // iter - nt vector
 // binaty_insertion(sepparated) sort - and theory 
+
+
+// perfect forwarding + universal reference + push_back
