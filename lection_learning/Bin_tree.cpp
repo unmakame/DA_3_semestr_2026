@@ -1,4 +1,4 @@
-
+#include<iostream>
 
 
 template <typename T>
@@ -54,10 +54,7 @@ private:
 
         if(node->data < val){
             return search(val, node->left);
-        }
-
-        
-        if(node->data > val){
+        } else {
             return search(val, node->right);
         }
         return false;
