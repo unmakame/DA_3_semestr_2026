@@ -27,7 +27,7 @@ private:
         }
     }
 
-    void insert(const T& val, Node *node, Node *parent){
+    void insert(const T& val, Node *&node, Node *parent){
         if(node == nullptr){
             node = new Node(val);
             node->parent = parent;
@@ -72,7 +72,7 @@ public:
     }
 
     bool search(const T& val){
-        search(val,root);
+        return search(val,root);
     }
 
 };
@@ -84,7 +84,18 @@ int main(){
     tree.insert(3);
     tree.insert(7);
     tree.insert(1);
+    tree.insert(5);
+    tree.insert(3);
+    tree.insert(7);
+    tree.insert(1);
+    tree.insert(7);
+    tree.insert(8);
+    tree.insert(65);
+    tree.insert(67);
 
-    bool found = tree.search(3);
+
+
+    bool found = tree.search(67);
+    std::cout << found << " ";
     return 0;
 }
