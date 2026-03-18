@@ -60,6 +60,19 @@ private:
         return false;
     }
 
+    bool delete_node(const T& val, Node *node){
+        if(node == nullptr) return false;
+
+        if(val < node->data){
+            return delete_node(val, node->left);
+        }
+
+        if(val > node->data){
+            return delete_node(val, node->right);
+        }
+        
+    }
+
 public:
     BinaryTree() : root(nullptr), size(0), h(0) {}
 
