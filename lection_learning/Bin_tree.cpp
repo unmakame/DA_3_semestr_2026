@@ -44,22 +44,6 @@ private:
 
     }
 
-    bool search(const T& val, Node *node){
-        if(node == nullptr){
-            return false;
-        }
-        if(node->data == val){
-            return true;
-        }
-
-        if(node->data < val){
-            return search(val, node->left);
-        } else {
-            return search(val, node->right);
-        }
-        return false;
-    }
-
     bool delete_node(const T& val, Node*& node) {  
     if (node == nullptr) return false;
     
@@ -71,32 +55,46 @@ private:
     }
     else {  
         Node* toDelete = node;
+        
         if (node->left == nullptr && node->right == nullptr) {
             node = nullptr;
+            delete toDelete;
+            size--;
+            return true;
         }
-
         else if (node->left == nullptr) {
             node = node->right;
+            if (node != nullptr) {
+                node->parent = toDelete->parent;
+            }
+            delete toDelete;
+            size--;
+            return true;
         }
-
         else if (node->right == nullptr) {
             node = node->left;
+            if (node != nullptr) {
+                node->parent = toDelete->parent;
+            }
+            delete toDelete;
+            size--;
+            return true;
         }
-   
         else {
             Node* parent = node;
             Node* successor = node->right;
             
-           
             while (successor->left != nullptr) {
                 parent = successor;
                 successor = successor->left;
             }
             
-          
             node->data = successor->data;
             
-           
+            if (successor->right != nullptr) {
+                successor->right->parent = parent;
+            }
+            
             if (parent == node) {
                 parent->right = successor->right;
             } else {
@@ -104,10 +102,9 @@ private:
             }
             
             delete successor;
-            return true;  
-        
-        delete toDelete;  
-        return true;
+            size--;
+            return true;
+        }
     }
 }
 
@@ -132,21 +129,11 @@ public:
 int main(){
     BinaryTree<int> tree;
     tree.insert(5);
-    tree.insert(3);
-    tree.insert(7);
-    tree.insert(1);
-    tree.insert(5);
-    tree.insert(3);
-    tree.insert(7);
-    tree.insert(1);
-    tree.insert(7);
-    tree.insert(8);
-    tree.insert(65);
-    tree.insert(67);
 
 
+    tree.delete_node(5);
 
-    bool found = tree.search(67);
-    std::cout << found << " ";
+    // bool found = tree.search(67);
+    // std::cout << found << " ";
     return 0;
 }
