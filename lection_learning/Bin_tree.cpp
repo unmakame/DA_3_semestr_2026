@@ -129,11 +129,5 @@ public:
 int main(){
     BinaryTree<int> tree;
     tree.insert(5);
-
-
-    tree.delete_node(5);
-
-    // bool found = tree.search(67);
-    // std::cout << found << " ";
     return 0;
 }
