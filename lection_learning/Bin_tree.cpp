@@ -60,18 +60,56 @@ private:
         return false;
     }
 
-    bool delete_node(const T& val, Node *node){
-        if(node == nullptr) return false;
-
-        if(val < node->data){
-            return delete_node(val, node->left);
-        }
-
-        if(val > node->data){
-            return delete_node(val, node->right);
-        }
-        
+    bool delete_node(const T& val, Node*& node) {  
+    if (node == nullptr) return false;
+    
+    if (val < node->data) {
+        return delete_node(val, node->left);
     }
+    else if (val > node->data) {
+        return delete_node(val, node->right);
+    }
+    else {  
+        Node* toDelete = node;
+        if (node->left == nullptr && node->right == nullptr) {
+            node = nullptr;
+        }
+
+        else if (node->left == nullptr) {
+            node = node->right;
+        }
+
+        else if (node->right == nullptr) {
+            node = node->left;
+        }
+   
+        else {
+            Node* parent = node;
+            Node* successor = node->right;
+            
+           
+            while (successor->left != nullptr) {
+                parent = successor;
+                successor = successor->left;
+            }
+            
+          
+            node->data = successor->data;
+            
+           
+            if (parent == node) {
+                parent->right = successor->right;
+            } else {
+                parent->left = successor->right;
+            }
+            
+            delete successor;
+            return true;  
+        
+        delete toDelete;  
+        return true;
+    }
+}
 
 public:
     BinaryTree() : root(nullptr), size(0), h(0) {}
