@@ -136,7 +136,7 @@ public:
 
     bool insert(const char* k, T val) {
         String key(k);
-        if (!root) {
+        if (!root) { 
             root = new Node{nullptr, nullptr, key, val, -1};
             count = 1; 
             return true;
@@ -153,10 +153,8 @@ public:
         ptrdiff_t dbit = digitizer(key, c->key);
         if (dbit < 0) return false;
         
-        // Create a leaf node for the new key
-        Node* newLeaf = new Node{nullptr, nullptr, key, val, -1};
         
-        // Create internal node that will split the two keys
+        Node* newLeaf = new Node{nullptr, nullptr, key, val, -1};
         Node* newInternal = new Node{nullptr, nullptr, String(""), 0, dbit};
         
         p = nullptr;
@@ -173,18 +171,27 @@ public:
             return false;
         }
         
-        // Attach children based on bit values
-        if (digitizer(key, dbit)) { 
-            newInternal->right = newLeaf;
-            newInternal->left = cur;
-        } else { 
-            newInternal->left = newLeaf;
-            newInternal->right = cur;
-        }
         
-        if (!p) root = newInternal;
-        else if (digitizer(key, p->diffBit)) p->right = newInternal;
-        else p->left = newInternal;
+        if (!p) {
+            if (digitizer(key, dbit)) { 
+                newInternal->left = newLeaf;
+                newInternal->right = cur;
+            } else { 
+                newInternal->right = newLeaf;
+                newInternal->left = cur;
+            }
+            root = newInternal;
+        } else {
+            if (digitizer(key, dbit)) { 
+                newInternal->right = newLeaf;
+                newInternal->left = cur;
+            } else { 
+                newInternal->left = newLeaf;
+                newInternal->right = cur;
+            }
+            if (digitizer(key, p->diffBit)) p->right = newInternal;
+            else p->left = newInternal;
+        }
         
         count++; 
         return true;
@@ -239,13 +246,11 @@ public:
             Node* n = stack.pop();
             
             if (n->diffBit == -1) {
-                // This is a leaf, save it
                 size_t l = n->key.size();
                 f.write((char*)&l, sizeof(l));
                 f.write(n->key.c_str(), l);
                 f.write((char*)&n->value, sizeof(T));
             } else {
-                // This is an internal node, push children
                 if (n->right) stack.push(n->right);
                 if (n->left) stack.push(n->left);
             }

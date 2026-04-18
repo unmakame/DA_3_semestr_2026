@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+      <FILENAME>patricia_tree_before.cpp</FILENAME>
+      <LINE>35</LINE>
+      <COLUMN>24</COLUMN>
+    </SFA>
+    <DEFECTCODE>6386</DEFECTCODE>
+    <DESCRIPTION>Переполнение буфера при записи в "data":  доступный для записи объем равен "capacity_*8" байт, однако записать можно только "16" байт.</DESCRIPTION>
+    <FUNCTION>Vector&lt;PatriciaTree&lt;String,unsigned __int64,LatinDigitizer&gt;::Node *&gt;::{ctor}</FUNCTION>
+    <DECORATED>??0?$Vector@PEAUNode@?$PatriciaTree@VString@@_KULatinDigitizer@@@@@@QEAA@AEBV0@@Z</DECORATED>
+    <FUNCLINE>31</FUNCLINE>
+    <PROBABILITY>1</PROBABILITY>
+    <RANK>4</RANK>
+    <CATEGORY>
+      <RULECATEGORY>mspft</RULECATEGORY>
+    </CATEGORY>
+    <PATH>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>10</LINE>
+        <COLUMN>14</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>31</LINE>
+        <COLUMN>39</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>31</LINE>
+        <COLUMN>63</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>32</LINE>
+        <COLUMN>17</COLUMN>
+        <KEYEVENT>
+          <ID>1</ID>
+          <KIND>branch</KIND>
+          <IMPORTANCE>Full</IMPORTANCE>
+          <MESSAGE>Войти в эту ветвь (предполагается "other.data")</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>33</LINE>
+        <COLUMN>17</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>34</LINE>
+        <COLUMN>24</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>34</LINE>
+        <COLUMN>33</COLUMN>
+        <KEYEVENT>
+          <ID>2</ID>
+          <KIND>branch</KIND>
+          <IMPORTANCE>Full</IMPORTANCE>
+          <MESSAGE>Войти в этот цикл (предполагается "i&lt;size_")</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>35</LINE>
+        <COLUMN>24</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>34</LINE>
+        <COLUMN>42</COLUMN>
+        <KEYEVENT>
+          <ID>3</ID>
+          <KIND>declaration</KIND>
+          <IMPORTANCE>Essential</IMPORTANCE>
+          <MESSAGE>"i" может быть равно 1</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>34</LINE>
+        <COLUMN>33</COLUMN>
+        <KEYEVENT>
+          <ID>4</ID>
+          <KIND>branch</KIND>
+          <IMPORTANCE>Full</IMPORTANCE>
+          <MESSAGE>Продолжить этот цикл (предполагается "i&lt;size_")</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+      <SFA>
+        <FILEPATH>C:\Users\bayan\Desktop\DA\лабораторная 2\</FILEPATH>
+        <FILENAME>patricia_tree_before.cpp</FILENAME>
+        <LINE>35</LINE>
+        <COLUMN>24</COLUMN>
+        <KEYEVENT>
+          <ID>5</ID>
+          <KIND>usage</KIND>
+          <IMPORTANCE>Essential</IMPORTANCE>
+          <MESSAGE>Недопустимая операция записи в "data[1]" (доступный для записи диапазон: от 0 до 0)</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+    </PATH>
+  </DEFECT>
+</DEFECTS>
