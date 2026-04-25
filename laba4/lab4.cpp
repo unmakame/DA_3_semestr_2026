@@ -9,8 +9,11 @@
 
 using uint = uint32_t;
 
-struct InputData {
+struct PatternData {
     std::vector<uint> pattern;
+};
+
+struct TextData {
     std::vector<uint> text;
     std::vector<std::pair<int, int>> pos;
 };
@@ -56,13 +59,15 @@ std::vector<int> build_good_suffix(const std::vector<uint>& pat) {
     return shift;
 }
 
-bool read_input(std::istream& in, InputData& data) {
+bool read_pattern(std::istream& in, PatternData& data) {
     std::string line;
-
     if (!std::getline(in, line)) return false;
     data.pattern = parse_uint_line(line);
-    if (data.pattern.empty()) return false;
+    return !data.pattern.empty();
+}
 
+bool read_text(std::istream& in, TextData& data) {
+    std::string line;
     int line_num = 0;
     while (std::getline(in, line)) {
         ++line_num;
@@ -150,10 +155,7 @@ std::vector<int> search_apostolico_giancarlo(
     return matches;
 }
 
-void print_matches(
-    const std::vector<int>& starts,
-    const std::vector<std::pair<int, int>>& pos
-) {
+void print_matches(const std::vector<int>& starts, const std::vector<std::pair<int, int>>& pos) {
     for (int s : starts) {
         std::cout << pos[s].first << ", " << pos[s].second << '\n';
     }
@@ -163,10 +165,13 @@ int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
 
-    InputData data;
-    if (!read_input(std::cin, data)) return 0;
+    PatternData pattern_data;
+    TextData text_data;
 
-    auto starts = search_apostolico_giancarlo(data.pattern, data.text);
-    print_matches(starts, data.pos);
+    if (!read_pattern(std::cin, pattern_data)) return 0;
+    if (!read_text(std::cin, text_data)) return 0;
+
+    auto starts = search_apostolico_giancarlo(pattern_data.pattern, text_data.text);
+    print_matches(starts, text_data.pos);
     return 0;
 }
