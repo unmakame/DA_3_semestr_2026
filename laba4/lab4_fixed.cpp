@@ -120,7 +120,10 @@ void apostolico_giancarlo(
         }
 
         if (j < 0) {
-            print_match(pos[s]);
+            // ✓ ИСПРАВКА #1: Проверяем что ВСЕ элементы совпадения в одной строке
+            if (pos[s].first == pos[s + m - 1].first) {
+                print_match(pos[s]);
+            }
 
             skip[s + m - 1] = m;
             s += good[0];
@@ -162,6 +165,9 @@ void process_text(
     int line_num = 1;
 
     while (std::getline(std::cin, line)) {
+        // ✓ ИСПРАВКА #2: Пропускаем пустые строки
+        if (line.empty()) continue;
+        
         std::stringstream ss(line);
 
         uint x;
