@@ -2,17 +2,13 @@
 #include <string>
 #include <vector>
 #include <map>
-
 using namespace std;
-
-const int INF = 1e9;
 
 struct Node {
     int start;
     int* end;
     map<char, int> ch;
     int suffix_link;
-
     Node(int start, int* end) : start(start), end(end), suffix_link(0) {}
 };
 
@@ -21,70 +17,72 @@ private:
     string t;
     vector<Node> tree;
     int root;
-    
     int active_node;
     int active_edge;
     int active_length;
     int remaining;
     int leaf_end;
 
+    void add_new_leaf(int pos, int from_node, char ch) {
+        tree.push_back(Node(pos, &leaf_end));
+        tree[from_node].ch[ch] = tree.size() - 1;
+    }
+
+    int split_edge(int node, int active_edge_char, int active_len, int pos) {
+        int next_node = tree[node].ch[active_edge_char];
+        int* split_end = new int(tree[next_node].start + active_len - 1);
+        tree.push_back(Node(tree[next_node].start, split_end));
+        int split_node = tree.size() - 1;
+        tree[node].ch[active_edge_char] = split_node;
+        tree.push_back(Node(pos, &leaf_end));
+        tree[split_node].ch[t[pos]] = tree.size() - 1;
+        tree[next_node].start += active_len;
+        tree[split_node].ch[t[tree[next_node].start]] = next_node;
+
+        return split_node;
+    }
+
+    bool walk_down(int& next_node, int& active_len) {
+        int edge_len = *(tree[next_node].end) - tree[next_node].start + 1;
+        if (active_len >= edge_len) {
+            active_edge += edge_len;
+            active_len -= edge_len;
+            active_node = next_node;
+            return true;
+        }
+        return false;
+    }
+
     void extend(int pos) {
         leaf_end = pos;
         remaining++;
-        int last_created_internal_node = 0;
-
+        int last_created = 0;
         while (remaining > 0) {
-            if (active_length == 0) {
-                active_edge = pos;
-            }
-
+            if (active_length == 0) active_edge = pos;
             char current_char = t[active_edge];
-            
             if (tree[active_node].ch.find(current_char) == tree[active_node].ch.end()) {
-                tree.push_back(Node(pos, &leaf_end));
-                tree[active_node].ch[current_char] = tree.size() - 1;
-
-                if (last_created_internal_node > 0) {
-                    tree[last_created_internal_node].suffix_link = active_node;
-                    last_created_internal_node = 0;
+                add_new_leaf(pos, active_node, current_char);
+                if (last_created > 0) {
+                    tree[last_created].suffix_link = active_node;
+                    last_created = 0;
                 }
             } else {
                 int next_node = tree[active_node].ch[current_char];
-                int edge_length = *(tree[next_node].end) - tree[next_node].start + 1;
-
-                if (active_length >= edge_length) {
-                    active_edge += edge_length;
-                    active_length -= edge_length;
-                    active_node = next_node;
-                    continue;
-                }
+                if (walk_down(next_node, active_length)) continue;
 
                 if (t[tree[next_node].start + active_length] == t[pos]) {
-                    if (last_created_internal_node > 0 && active_node != root) {
-                        tree[last_created_internal_node].suffix_link = active_node;
+                    if (last_created > 0 && active_node != root) {
+                        tree[last_created].suffix_link = active_node;
                     }
                     active_length++;
                     break;
                 }
-
-                int* split_end = new int(tree[next_node].start + active_length - 1);
-                tree.push_back(Node(tree[next_node].start, split_end));
-                int split_node = tree.size() - 1;
-
-                tree[active_node].ch[current_char] = split_node;
-
-                tree.push_back(Node(pos, &leaf_end));
-                tree[split_node].ch[t[pos]] = tree.size() - 1;
-
-                tree[next_node].start += active_length;
-                tree[split_node].ch[t[tree[next_node].start]] = next_node;
-
-                if (last_created_internal_node > 0) {
-                    tree[last_created_internal_node].suffix_link = split_node;
+                int split_node = split_edge(active_node, current_char, active_length, pos);
+                if (last_created > 0) {
+                    tree[last_created].suffix_link = split_node;
                 }
-                last_created_internal_node = split_node;
+                last_created = split_node;
             }
-
             remaining--;
             if (active_node == root && active_length > 0) {
                 active_length--;
@@ -101,7 +99,6 @@ public:
         root = 0;
         int* root_end = new int(-1);
         tree.push_back(Node(-1, root_end));
-        
         active_node = root;
         active_edge = -1;
         active_length = 0;
@@ -116,24 +113,17 @@ public:
     string find_min_cut(int n) {
         string result = "";
         int current_node = root;
-        int needed_length = n;
-
-        while (needed_length > 0) {
+        int needed = n;
+        while (needed > 0) {
             auto it = tree[current_node].ch.begin();
-            
-            if (it->first == '$' && needed_length > 0 && tree[current_node].ch.size() > 1) {
-                it++;
-            }
-
+            if (it->first == '$' && tree[current_node].ch.size() > 1) ++it;
             int next_node = it->second;
             int start = tree[next_node].start;
             int end = *(tree[next_node].end);
             int edge_len = end - start + 1;
-
-            int chars_to_take = min(needed_length, edge_len);
-            result += t.substr(start, chars_to_take);
-
-            needed_length -= chars_to_take;
+            int take = min(needed, edge_len);
+            result += t.substr(start, take);
+            needed -= take;
             current_node = next_node;
         }
         return result;
@@ -143,15 +133,12 @@ public:
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-
     string s;
     if (cin >> s) {
         int n = s.length();
         string t = s + s + "$";
-        
         SuffixTree st(t);
         cout << st.find_min_cut(n) << "\n";
     }
-
     return 0;
 }
