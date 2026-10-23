@@ -61,7 +61,7 @@ public:
     }
 };
 
-auto main() -> int {
+int main(){
     int n; cin >> n;
     NumberGame game(n);
     game.solve();
